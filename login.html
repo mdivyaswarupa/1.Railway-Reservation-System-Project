@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Railway Reservation login</title>
+    <link rel="stylesheet" href="login.css">
+    <script>
+        function validateForm() {
+            var username = document.getElementById("uname").value;
+            var password = document.getElementById("upwd").value;
+            const pattern1 = /^[a-zA-Z\s]+$/;
+            let check1 = pattern1.test(username);
+
+            if (username === "") {
+                document.getElementById("error").innerHTML = "Username cannot be empty";
+                return false;
+            } 
+	   else if (!check1) {
+                document.getElementById("error").innerHTML = "Username should contain alphabets only";
+                return false;
+            }
+
+            if (password === "") {
+                document.getElementById("pderror").innerHTML = "Password cannot be empty";
+                return false;
+            } 
+	   else if (password.length < 6) {
+                document.getElementById("pderror").innerHTML = "Password must be at least 6 characters";
+                return false;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="mq">
+        <h1><strong><marquee scrollamount="15">Indian Railways welcomes you || இந்திய ரயில்வே உங்களை வரவேற்கிறது || భారతీయ రైల్వే
+                    మీకు స్వాగతం పలుకుతోంది</marquee></strong></h1>
+    </div>
+    <div id="center">
+        <img left="80" align="center" width="150" height="150" src="logo.png" />
+        <div />
+        <h1 align="center" style="color:maroon">Safety | Security | Punctuality</h1>
+        <div class="lbox">
+            <h1>Login</h1>
+            <form id="form" method="post" action="home.html" onsubmit="return validateForm()">
+                <div class="textbox">
+                    <input id="uname" type="text" placeholder="Username" name="uname"/>
+                    <span id="error" style="color:maroon"></span>
+                </div>
+                <div class="textbox">
+                    <input id="upwd" type="password" placeholder="Password" name="pswd" />
+                </div>
+                <span id="pderror" style="color:maroon"></span>
+                <div>
+		<a href="home.html" target="_self">
+                    <input type="submit" class="bn" name="signin" value="Sign in" />&nbsp
+                    <a href="registration1.html" target="_self">
+                        <input type="button" class="bn" name="register" value="Register" /></a>&nbsp
+                    <a href="forgot.html" target="_self">
+                        <input type="button" class="bn" name="forgotpasw" value="Forgot password" /></a>
+                </div>
+            </form>
+        </div>
+</body>
+
+</html>
+

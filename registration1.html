@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Registration Page</title>
+	<link rel="stylesheet" href="registration1.css">
+	<script>
+		function validation() {
+			var userName = document.getElementById("user").value;
+			var email = document.getElementsByName("email")[0].value;
+			var password = document.getElementsByName("pwd")[0].value;
+			var gender = document.querySelector('input[name="gender"]:checked');
+			var phone = document.getElementsByName("phone")[0].value;
+			var userError = document.getElementById("usere");
+			var emailError = document.getElementById("emaile");
+			var passwordError = document.getElementById("pase");
+			var genderError = document.getElementById("gene");
+			var phoneError = document.getElementById("phne");
+			var valid = true;
+
+			// Clear previous errors
+			userError.innerHTML = "";
+			emailError.innerHTML = "";
+			passwordError.innerHTML = "";
+			genderError.innerHTML = "";
+			phoneError.innerHTML = "";
+
+			// Validate name
+			if (userName === "") {
+				userError.innerHTML = "Name is required<br>";
+				valid = false;
+			}
+
+			// Validate email
+			if (email === "") {
+				emailError.innerHTML = "Email is required<br>";
+				valid = false;
+			} 
+			else {
+				var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+				if (!emailPattern.test(email)) {
+					emailError.innerHTML = "Invalid email format<br>";
+					valid = false;
+				}
+			}
+
+			// Validate password
+			if (password === "") {
+				passwordError.innerHTML = "Password is required<br>";
+				valid = false;
+			}
+
+			// Validate gender
+			if (!gender) {
+				genderError.innerHTML = "Please select a gender<br>";
+				valid = false;
+			}
+
+			// Validate phone number
+			var phonePattern = /^\d{10}$/;
+			if (phone === "" ) {
+				phoneError.innerHTML = "please enter phone number<br>";
+				valid = false;
+			}
+			else if(!phonePattern.test(phone)){
+				phoneError.innerHTML = "Invalid phone number format<br>";
+				valid = false;
+			}
+
+			return valid;
+		}
+	</script>
+</head>
+<body>
+	<h1 align="center">Indian Railways</h1>
+	<nav>
+		<img src="irslogo.png" class="logo">
+	</nav>
+	<div class="imp">
+		<div class="register">
+			<h2>Register here</h2>
+			<form id="reg" method="post" action="booking1.html" onsubmit="return validation();">
+				<label>Name: </label><br>
+				<input type="text" name="user" id="user" placeholder="Enter your first name" /><br><br><br>
+				<span style="color:white" id="usere"></span>
+				<label>Email: </label><br>
+				<input type="text" name="email" placeholder="Enter your email" /><br><br>
+				<span style="color:white" id="emaile"></span>
+				<label>Password: </label><br>
+				<input type="password" placeholder="Enter password" name="pwd" ><br/><br/>
+				<span style="color:white" id="pase"></span>
+				<label >Gender: </label><br>
+				<input type="radio" name="gender" value="male" >Male&nbsp 
+				<input type="radio" name="gender" value="female" >Female &nbsp
+				<input type="radio" name="gender" value="others" >Others<br/><br/>
+				<span style="color:white" id="gene"></span>
+				<label>Phone number: </label><br>
+				<input type="text" name="phone" placeholder="Enter your Phone"><br/><br/>
+				<span style="color:white" id="phne"></span>
+				<input type="submit" value="Submit" name="submit" id="submit" />
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+

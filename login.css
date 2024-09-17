@@ -1,0 +1,56 @@
+
+
+body
+{
+	margin:0;
+	padding:0;
+	font-family:sans-serif;
+	background-image: url('preview.gif');
+	background-repeat:no-repeat;
+	background-size:cover;
+	
+}
+.lbox
+{
+	width:280px;
+	position:absolute;
+	top:25%;
+	left:80%;
+	transform:translate(-50%,-50%);
+	color:black;
+}
+.lbox h1
+{
+	float:left;
+	font-size:40px;
+	border-bottom:6px solid #4caf50;
+	margin-bottom:50px;
+	padding:13px 0
+}
+.textbox
+{
+	width:100%;
+	overflow:hidden;
+	font-size:20px;
+	padding:8px 0;
+	margin:8px 0;
+	border-bottom:1px solid #4caf50;
+}
+.textbox input
+{
+	border:none;
+	outline:none;
+	background-none;
+	font-size:18px;
+	width:1000px;
+	margin:0px;
+}
+.mq
+{
+	color:#ff3d00;
+	
+}
+#center
+{
+	text-align: center;
+}

@@ -1,0 +1,1384 @@
+home.html :   <html>
+	<head>
+		<title>Home page</title>
+		<link rel="stylesheet" href="home.css">
+	</head>
+	<body>
+		<script>
+			<?php
+		session_start();
+
+		// Check if the user is already logged in, redirect to home page if they are
+		if (isset($_SESSION['username'])) {
+		  header("Location: home.html");
+		  exit();
+		}
+		?>
+		</script>
+		<div class="header">
+			<nav>
+				<img src="irslogo.png" class="logo">
+				<ul class="nav-links">
+					<li><a href="">Home</a></li>
+					<li><a href="Booking.html" target="_self">Book Tickets</a></li>
+					<li><a href="cancel.html" target="_self">Cancel Tickets</a></li>
+					<li><a href="about.html" target=_self">About us</a></li>
+					<li><a href="contact.html" target=_self>Contact Us</a></li>
+				</ul>
+			</nav>
+		</div>
+		<div class="content">
+			<h1>Plan a SAFE Journey</h1>
+		</div>
+	</body>
+</html>       home.css:    *{
+	margin: 0;
+	padding: 0;
+	font-family: "poppins", sans-serif;
+	box-sizing:border-box;
+}
+
+.header
+{
+	height: 100vh;
+	width: 100%;
+	padding: 0 8%;
+	background-image: url('photo-1611502867268-9193c5c45f09.jpeg');
+	position: relative;
+}
+
+nav
+{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.logo
+{
+	width:300px;
+}
+.nav-links{
+	padding:28px 0;
+}
+.nav-links li{
+	display: inline-block;
+	margin: 0 15px;
+}
+.nav-links li a{
+	text-decoration: none;
+	color: #fff;
+	padding: 5px 0;
+	position: relative;
+}
+.nav-links li a::after{
+	content: '';
+	background: #ff3d00;
+	width: 0;
+	height: 2px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.nav-links li a:hover::after{
+	width: 100%;
+}
+.btn
+{
+	background: #ff3d00;
+	color: #fff;
+	padding: 10px 30px;
+	border-radius: 3;
+	cursor: pointer;
+}
+.content
+{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 90%;
+	max-width: 900px;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	color: #fff;
+}
+.content h1{
+	font-size: 60px;
+	font-weight: 600;
+	margin-bottom:10px;
+	color: #FF6347;
+}
+.content form
+{
+	background: #fff;
+	padding: 10px;
+	border-radius: 6px;
+	display: flex;
+}
+.content form input
+{
+	flex: 1;
+	border: none;
+	outline: none;
+	padding: 0 17px;
+	font-size: 18px;
+}
+.content form button
+{
+	background: #ff3d00;
+	color: white;
+	padding: 15px 40px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}     login.html:    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form action="login.php" method="post">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+       
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+       
+      <input type="submit" value="Login">
+    </form>
+  </div>
+</body>
+</html>
+ login_process.php:   <?php
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  $username = $_POST['uname'];
+  $password = $_POST['pswd'];
+
+  // Perform your database validation here (replace with your logic)
+  // Example validation: Check if the username and password match a database record
+  $validUser = true; 
+
+  if ($validUser) {
+    // Set session variables
+    $_SESSION['username'] = $username;
+
+    // Redirect to the home page
+    header("Location: home.html");
+    exit();
+  } else {
+    // Redirect back to the login page with an error message
+    header("Location: login.html?error=1");
+    exit();
+  }
+}
+?>
+phpForm.php:   <!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.min.css">
+	<link rel="stylesheet" href="/home/student/Desktop/PROJECT/css/style.css" />
+	<title>Register</title>
+	<style>
+		body {
+			background-image: url("background.jpg");
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			background-color: #000;
+			color: #fff;
+		}
+	</style>
+</head>
+
+<body>
+	<?php
+	$servername = "localhost";
+	$username = "root";
+	$dbpassword = "";
+	$dbname = "WEBTECH";
+
+	// Create a new connection
+	$conn = new mysqli($servername, $username, $dbpassword, $dbname);
+
+	// Check connection
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+
+	$name = $_POST['user'];
+	$email = $_POST['email'];
+	$pwd = $_POST['pwd'];
+	$gender = $_POST['gender'];
+	$phone = $_POST['phone'];
+
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		$insertQuery = "INSERT INTO Register (NAME, EMAIL, PASSWORD, GENDER, PHONE) VALUES (?, ?, ?, ?, ?)";
+		$stmt = $conn->prepare($insertQuery);
+		$stmt->bind_param("sssss", $name, $email, $pwd, $gender, $phone);
+
+		if ($stmt->execute()) {
+			echo "<h2>YOUR DETAILS</h2>";
+		} else {
+			echo "Error: " . $stmt->error;
+		}
+		$stmt->close();
+	}
+
+	// Fetch and display data in a table
+	$fetchQuery = "SELECT * FROM Register";
+	$result = $conn->query($fetchQuery);
+
+	if ($result->num_rows > 0) {
+		echo "<table border='1'>
+        <tr>
+          <th>NAME</th>
+          <th>EMAIL</th>
+          <th>GENDER</th>
+          <th>PHONE</th>
+        </tr>";
+
+		while ($row = $result->fetch_assoc()) {
+			echo "<tr>
+			    <td>" . $row['NAME'] . "</td>
+			    <td>" . $row['EMAIL'] . "</td>
+			    <td>" . $row['GENDER'] . "</td>
+			    <td>" . $row['PHONE'] . "</td>
+			  </tr>";
+		}
+
+		echo "</table>";
+	} else {
+		echo "No records found.";
+	}
+
+	$conn->close(); // Close the connection
+	?>
+	<button><a href="home.html">GO TO HOME</a></button>
+</body>
+
+</html>
+registration1.html:   <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Register</h2>
+    <form action="register.php" method="post">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+       
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+       
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+       
+      <input type="submit" value="Register">
+    </form>
+  </div>
+</body>
+</html>
+registration1.css:   *
+{
+	margin:0;
+	padding:0;
+ 
+}
+body
+{
+	background: url('front.jpg');
+	background-repeat: no-repeat;
+	background-size:100% 100%;
+}
+div.imp{
+	width:400px;
+	margin:100px auto 0px auto;
+}
+h2
+{
+	text-align: center;
+	padding: 20px;
+	font-family: sans-serif;
+}
+div.register
+{
+	background-color:rgba(0,0,0,0.5);
+	width:100%;
+	font-size: 18px;
+	border-radius: 5px;
+	border:1px solid rgba(255,255,255,0,3);
+	box-shadow:2px 2px 15px rgba(0,0,0,0.3);
+	color: #fff;
+}
+form#reg
+{
+	margin:20px;
+}
+label{
+	font-family: sans-serif;
+	font-size: 18px;
+	font-style: italic;
+}
+input#name
+{
+	width:300px;
+	border:1px solid #ddd;
+	border-radius: 3px;
+	outline: 0;
+	padding: 0px;
+	background-color: #fff;
+	box-shadow: inset 1px 1px 5px rgba(0,0,0,0.3);
+}
+input#submit
+{
+	width:200px;
+	padding:7px;
+	font-size: 16px;
+	font-family: sans-serif;
+	font-weight:600;
+	border: none;
+	border-radius:3px;
+	background-color: rgba(250,100,0,0.8);
+	color:#fff;
+	cursor: pointer;
+	border: 1px solid rgba(255,255,255,0.3);
+	box-shadow: 1px 1px 5px
+	rgba(0,0,0,0.3);
+	margin-bottom: 20px;
+}
+label,h2
+{
+	text-shadow: 1px,1px,5px
+	rgba(0,0,0,0.3);
+}
+h1
+{
+	color: white;
+	position: center;
+	top: 20;
+	left: 555;
+}
+.logo
+{
+	width:400px;
+	position: fixed;
+	top:35;
+	right:15;
+}
+p
+{
+	color: white;
+}    style.css:  *{
+  padding:0;
+  margin:0;
+  color: #fff;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  border: none;
+}
+body{
+  background-image: url('back.jpg');
+  width: 100%; 
+  height: 100vh;
+  background-size: 100% 100vh;
+  position: relative;
+  background-repeat: no-repeat;
+}
+/*
+.container{
+  position:relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height:100%;
+  padding: 20px 100px;
+}
+.container:after{
+  content:'';
+  position:absolute;
+  left:0;
+  top:0;
+  width: 100%;
+  height:100%;
+  background: url("backblur.jpg") no-repeat center;
+  background-size: cover;
+  z-index: -1;
+  filter:blur(5px);
+  for more height change height to 110vh at form and content min height
+}*/
+header{
+  position: absolute;
+  text-align: center;
+  width: 75%;
+  left: 12%;
+  top: 2rem;
+}
+header h1{
+  font-size: 30px;
+}
+.empty{
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+.content{
+  display: flex;
+  min-height: 100vh;
+}
+.content section{
+  margin-top: 8vh;
+  margin-left: 20vh;
+}
+.content-form{
+  margin-top: 7rem;
+}
+section i{
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(255,255,255,0.8);
+  color: #000;
+  text-align: center;
+}
+.form{
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 50%;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.form .contact-form input{
+  width: 30rem;
+  background-color: transparent;
+  border: 0px;
+  border: transparent;
+  margin: 20px;
+  padding: 20px;
+  font-size: 18px;
+  border-bottom: 2px solid #fff;
+}
+.form .contact-form input ~ span{
+  position: absolute;
+  left: 20px;
+  transition: 0.9s ease-in-out;
+  margin-top: 10px;
+}
+.form .contact-form input:focus ~ span{
+  transform: translateY(-20px);
+  pointer-events: none;
+}
+.form .contact-form textarea{
+  width: 30rem;
+  border: 0;
+  background-color: transparent;
+  margin: 20px;
+  font-size: 17px;
+  border-bottom: 2px solid #fff;
+}
+.form .contact-form textarea ~ span{
+  position: absolute;
+  left: 20px;
+  margin-top: 10px;
+  transition: 0.9s ease-in-out;
+}
+.form .contact-form textarea:focus ~ span{
+  transform: translateY(-20px);
+  pointer-events: none;
+}
+.form .contact-form input[type=submit]{
+  background-color: dodgerblue;
+  border: 2px solid dodgerblue;
+  font-size: 18px;
+  width: 30%;
+  height: 50px;
+  margin-top: -5px;
+}
+.form .contact-form input[type=submit]:hover{
+  background-color: transparent;
+  color: dodgerblue;
+}
+.media{
+  position: absolute;
+  top: 85vh;
+  right: 20vh;
+  display: flex;
+  list-style: none;
+}
+.media li{
+  margin: 20px 30px;
+}
+/* coding for responsive*/
+@media screen and (max-width: 900px) {
+  body{
+    background-repeat: repeat-y;
+    overflow: auto;
+  }
+  header{
+    position: absolute;
+    top: 20%;
+    left: 0;
+    width: 100%;
+  }
+  .empty{
+    height: 200vh;
+  }
+  .form{
+    position: absolute;
+    top: 100vh;
+    margin-left: 10%;
+  }
+  .content-form{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 0;
+    margin-top: 53vh;
+    margin-left: 10vh;
+  }
+  .content section{
+    margin-top: 0;
+    margin-left: 0;
+  }
+  .media{
+    position: absolute;
+    top: 183vh;
+    right: 30px;
+  }
+}    thanks.css:   *
+{
+	margin:0;
+	padding:0;
+ 
+}
+body
+{
+	background: url('photo-1611502867268-9193c5c45f09.jpeg');
+	background-repeat: no-repeat;
+	background-size:100% 100%;
+}
+div.imp{
+	width:400px;
+	margin:100px auto 0px auto;
+}
+h2
+{
+	text-align: center;
+	padding: 20px;
+	font-family: sans-serif;
+}
+div.register
+{
+	background-color:rgba(0,0,0,0.5);
+	width:100%;
+	font-size: 18px;
+	border-radius: 10px;
+	border:1px solid rgba(255,255,255,0,3);
+	box-shadow:2px 2px 15px rgba(0,0,0,0.3);
+	color: #fff;
+}
+form#reg
+{
+	margin:40px;
+}
+label{
+	font-family: sans-serif;
+	font-size: 18px;
+	font-style: italic;
+}
+input#name
+{
+	width:300px;
+	border:1px solid #ddd;
+	border-radius: 3px;
+	outline: 0;
+	padding: 7px;
+	background-color: #fff;
+	box-shadow: inset 1px 1px 5px rgba(0,0,0,0.3);
+}
+input#submit
+{
+	width:200px;
+	padding:7px;
+	font-size: 16px;
+	font-family: sans-serif;
+	font-weight:600;
+	border: none;
+	border-radius:3px;
+	background-color: rgba(250,100,0,0.8);
+	color:#fff;
+	cursor: pointer;
+	border: 1px solid rgba(255,255,255,0.3);
+	box-shadow: 1px 1px 5px
+	rgba(0,0,0,0.3);
+	margin-bottom: 20px;
+}
+label,h2
+{
+	text-shadow: 1px,1px,5px
+	rgba(0,0,0,0.3);
+}
+h1
+{
+	color: white;
+	position: fixed;
+	top: 30;
+	left: 555;
+}
+.logo
+{
+	width:400px;
+	position: fixed;
+	top:15;
+	right:15;
+}
+p
+{
+	color: white;
+}   thanks.html:  <html>
+	<head>
+		<title>Thanks</title>
+		<link rel="stylesheet" href="thanks.css">
+	</head>
+	<body>
+		<h1 align="center">Indian Railways</h1>
+		<nav>
+			<img src="irslogo.png" class="logo">
+		</nav>
+		<div class="imp">
+		<div class="regsiter">
+		<form id="reg" method="post" action="home.html">
+			<p>Thank You for using Indian Railways.Your booking details has been sent to your Email.</p><br/>
+			<a href="home.html">
+				<input type="submit" value="Okay" name="submit" id="submit"/></a>
+		</form>
+	</body>
+</html>   forgot.html:   <html>
+<head>
+<title>Login page</title>
+<link rel="stylesheet" href="registration1.css">
+</head>
+<body>
+<h1 align="center">Indian Railways</h1>
+<nav><img src="irslogo.png" class="logo">
+</nav>
+<div class="imp"><div class="register"><h2>Forgot Password?</h2>
+<form id="reg" method="post" action="login.html"><label>Email: </label><br><input type="text" name="umail" placeholder="Enter your email"/><br><br>
+<input type="submit" value="Submit" name="submit" id="submit"/><br/><br/>
+<p>Note: Your credentials will be sent to your Email</p><br/></form>
+</body>
+</html>  contact.html:  <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Contact Us</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins&display=swap">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Contact Us</h1>
+        <p>
+          For any queries and details please contact us 
+        </p>
+      </header>
+      <div class="content">
+      <div class="content-form">
+        <section>
+         <h2>address</h2>
+          <p>
+            Gandhi Nagar, <br>
+            Kadapa,A.P 
+          </p>
+        </section>
+        <section>
+          
+          <h2>phone</h2>
+          <p>123-456-78901543</p>
+        </section>
+        <section>
+          
+          <h2>E-mail</h2>
+          <p>
+            techteam@gmail.com
+          </p>
+        </section>
+      </div>
+    </div>
+    <form method="post" action="home.html" target="_self">
+      <div class="form">
+        <div class="right">
+          <div class="contact-form">
+            <input type="text" name="fullname" required>
+            <span>Full name</span>
+          </div>
+
+          <div class="contact-form">
+            <input type="E-mail" name="email" required>
+            <span>E-mail Id</span>
+          </div>
+          <div class="contact-form">
+            <textarea name="text"></textarea>
+            <span>
+              Type your message....
+            </span>
+          </div>
+          <div class="contact-form">
+            <input type="submit" name="submit">
+          </div>
+
+        </div>
+      </div>
+
+    </form>
+    
+  </body>
+</html>  cancel.html:   <html>
+<head>
+	<title>Cancellation</title>
+	<link rel="stylesheet" href="registration1.css">
+</head>
+<body>
+	<div class="header">
+	<nav>
+	<img src="irslogo.png" class="logo">
+	</nav>
+	<h1 align="center">Indian Railways</h1>
+	<div class="imp">
+	<div class="register">	
+	<h2>Cancel Tickets</h2>
+	<form id="reg" action="home.html">                   
+			<label>Enter Train No: </label><br>
+			<input type="text" name="train number" required/><br/><br/>
+			<label>Enter Train TicketId: </label><br>
+			<input type="text" name="trainticketid" required/><br/><br/>
+			<label>Confirm Train TicketId: </label><br>
+			<input type="text" name="trainticketid" required/> </br><br/>
+			<input type="submit" value="Submit" name="submit" id="submit"/>
+	</form>
+	</div>
+	</div>
+</body>
+</html>   Booking.html:  <html>
+
+<head>
+<title>Booking page</title>
+<link rel="stylesheet" href="booking.css">
+</head>
+
+<body>
+<div class="header">
+<nav>
+<img src="irslogo.png" class="logo">
+</nav>
+</div>
+
+<h1 align="center">Indian Railways</h1>
+
+<div class="content">
+<h2 align="center" style="color:white">
+	<marquee>Safety | Security | Punctuality</marquee>
+</h2>
+<h1>Plan a SAFE Journey</h1>
+</div>
+
+<form method="post" action="booking1.html">
+
+	<input type="text" placeholder="Enter Origin"/>
+	<input type="text" placeholder="Enter Destination"/><br/>
+	<button type="submit">Find Trains</button>
+
+</form>
+</body>
+</html>   booking2.html:  <html>
+<head>
+	<title>Booking2</title>
+	<link rel="stylesheet" href="booking2.css">
+</head>
+<body>
+	<h1 align="center">Indian Railways</h1>
+	<div class="imp">
+	<div class="register">
+		<form action="thanks.html" method="post" id="reg"><br>
+			<label>Enter no.of passengers: </label><br>
+				<input type="text" placeholder="No.of passengers" name="uno"><br><br>	
+			<label>Enter FirstName of passenger: </label><br>
+				<input type="text" placeholder="FirstName" name="FirstName"/><br><br>
+			<label>Enter LastName of passenger: </label><br>
+				<input type="text" placeholder="LastName" name="LastName"/><br><br>
+			<label>Seat Preference: </label><br/>
+				<input type="radio" name="pref" value="2S"/>2S &nbsp 
+				<input type="radio" name="pref" value="SL"/>SL &nbsp
+				<input type="radio" name="pref" value="3A"/>3A &nbsp
+				<input type="radio" name="pref" value="2A"/>2A<br/><br/>
+			<label>Date of Journey: </label>
+				<input type="date"/><br/><br/>
+			<label>Select Payment mode </label>
+				<select name="payment">
+					<option>Google Pay</option>
+					<option>Phonepe</option>
+					<option>Paytm</option>
+				</select><br><br>
+			<p>Note: Money will be automatically deducted from your account when you submit</p><br>
+			<input type="submit" value="Submit" id="submit"/>
+		</form>
+	</div>
+	</div>
+</body>   booking2.css:  *
+{
+	margin:0;
+	padding:0;
+ 
+}
+body
+{
+	background: url('photo-1611502867268-9193c5c45f09.jpeg');
+	background-repeat: no-repeat;
+	background-size:100% 100%;
+}
+div.imp{
+	width:400px;
+	margin:100px auto 0px auto;
+}
+h2
+{
+	text-align: center;
+	padding: 20px;
+	font-family: sans-serif;
+}
+div.register
+{
+	background-color:rgba(0,0,0,0.5);
+	width:100%;
+	font-size: 18px;
+	border-radius: 10px;
+	border:1px solid rgba(255,255,255,0,3);
+	box-shadow:2px 2px 15px rgba(0,0,0,0.3);
+	color: #fff;
+}
+form#reg
+{
+	margin:40px;
+}
+label{
+	font-family: sans-serif;
+	font-size: 18px;
+	font-style: italic;
+}
+input#name
+{
+	width:300px;
+	border:1px solid #ddd;
+	border-radius: 3px;
+	outline: 0;
+	padding: 7px;
+	background-color: #fff;
+	box-shadow: inset 1px 1px 5px rgba(0,0,0,0.3);
+}
+input#submit
+{
+	width:200px;
+	padding:7px;
+	font-size: 16px;
+	font-family: sans-serif;
+	font-weight:600;
+	border: none;
+	border-radius:3px;
+	background-color: rgba(250,100,0,0.8);
+	color:#fff;
+	cursor: pointer;
+	border: 1px solid rgba(255,255,255,0.3);
+	box-shadow: 1px 1px 5px
+	rgba(0,0,0,0.3);
+	margin-bottom: 20px;
+}
+label
+{
+	text-shadow: 1px,1px,5px
+	rgba(0,0,0,0.3);
+}
+h1
+{
+	color: white;
+	position: fixed;
+	top: 30;
+	left: 555;
+}     booking1.html:   <html>
+
+<head>
+<title>Booking1</title>
+<link rel="stylesheet" href="booking1.css">
+</head>
+
+<body>
+<div class="header" >
+<table style="width:100%">
+	<thead>
+	<th>Train No</th>
+	<th>Train Name</th>
+	<th>Origin</th>
+	<th>Destination</th>
+	<th>Start by</th>
+	<th>Reach by</th>
+	<th>Action</th>
+	</thead>
+	<tbody>
+	<tr>
+		<td>16127</td>
+		<td>Chennai Egmore-Mumbai LTT Express</td>
+		<td>Chennai Egmore</td>
+		<td>Mumbai Dadar Central</td>
+		<td>18:20</td>
+		<td>14:40</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/>
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td>22160</td>
+		<td>MGR CHENNAI CENTRAL - MUMBAI CSMT SF Express</td>
+		<td>Chennai Central</td>
+		<td>Mumbai Dadar Central</td>
+		<td>13:25</td>
+		<td>11:52</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/></a>
+		</td>
+	</tr>
+	<tr>
+		<td>20953</td>
+		<td>MGR CHENNAI CENTRAL - AHMEDABAD SF Special</td>
+		<td>Chennai Central</td>
+		<td>Mumbai Dadar Central</td>
+		<td>15:50</td>
+		<td>13:22</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/></a>
+		</td>
+	</tr>
+	<tr>
+		<td>22180</td>
+		<td>MGR CHENNAI CENTRAL - MUMBAI LTT Express</td>
+		<td>Chennai Central</td>
+		<td>MUmbai LTT</td>
+		<td>15:50</td>
+		<td>14:25</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/></a>
+		</td>
+	</tr>
+	<tr>
+		<td>11074 </td>
+		<td>MGR CHENNAI CENTRAL - MUMBAI LTT Weekly Express</td>
+		<td>Chennai Central</td>
+		<td>MUmbai LTT</td>
+		<td>15:50</td>
+		<td>16:00</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/></a></td>
+	</tr>
+	<tr>
+		<td>11018</td>
+		<td>KARAIKAL - MUMBAI LTT Weekly Express</td>
+		<td>Chennai Egmore</td><td>Lokamanya Tilak</td>
+		<td>22:10</td>
+		<td>20:30</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/></a>
+		</td>
+	</tr>
+	<tr>
+		<td>22340</td>
+		<td>MGR CHENNAI CENTRAL - Lokmanya Tilak Express</td>
+		<td>Perambur</td>
+		<td>MUmbai LTT</td>
+		<td>15:50</td>
+		<td>14:25</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/></a>
+		</td>
+	</tr>
+	<tr>
+		<td>22158</td>
+		<td>MGR CHENNAI CENTRAL - Lokmanya Tilak Express</td>
+		<td>Chennai Central</td>
+		<td>MUmbai LTT</td>
+		<td>06:20</td>
+		<td>5:50</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/></a>
+		</td>
+	</tr>
+	<tr>
+		<td>12120</td>
+		<td>Tambaram - Lokmanya Tilak Express</td>
+		<td>Tambaram</td>
+		<td>MUmbai LTT</td>
+		<td>15:50</td>
+		<td>14:25</td>
+		<td>
+			<a href="booking2.html">
+			<input type="submit" value="Book"/></a>
+		</td>
+	</tr>
+
+	</tbody>
+
+</table>
+</div>
+</body>
+</html>    booking1.css:  *{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	
+}
+
+body
+{
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	font-family: sans-serif;
+	position: absolute;
+	width:100%;
+	height:100%;
+	background: #080008;
+}
+
+table
+{
+	border-collapse: collapse;
+	width: 300%;
+}
+
+.header
+{
+	height: 500px;
+	overflow: auto;
+	margin-top: 10%;
+	border: 1px solid #
+}
+
+.header thead th
+{
+	position: sticky;
+	top: 0;
+	background-color: black;
+	color: #ce3451;
+	font-size: 15px;
+	font-weight: 800; 
+}
+	
+th,td
+{
+	border-bottom: 1px solid #dddddd;
+	border: 1px solid #dddddd; 
+	padding: 10px 20px;
+	font-size: 14px;
+}
+
+tr:nth-child(even)
+{
+	background-color: #dddddd;
+}
+tr:nth-child(odd)
+{
+	background-color: #EDEEF1;
+}
+
+tr:hover td
+{
+	color: #44b478;
+	cursor: pointer;
+	background-color: #FFFFFF;
+}
+
+td input
+{
+	border: none;
+	padding:7px 20px;
+	border-radius: 20px;
+	background-color: black;
+	color: #ce3451;
+}
+
+
+booking.css:  *{
+	margin: 0;
+	padding: 0;
+	font-family: "poppins", sans-serif;
+	box-sizing:border-box;
+}
+
+body
+{
+	height: 100vh;
+	width: 100%;
+	padding: 0 8%;
+	background-image: url('photo-1611502867268-9193c5c45f09.jpeg');
+	position: relative;
+}
+
+.logo
+{
+	width:400px;
+	position: fixed;
+	left:60%
+}
+
+.btn
+{
+	background: #ff3d00;
+	color: #fff;
+	padding: 10px 30px;
+	border-radius: 3;
+	cursor: pointer;
+}
+.content
+{
+	position: absolute;
+	left:40%;
+	top: 40%;
+	width: 90%;
+	max-width: 1900px;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	color: #fff;
+}
+.content h1{
+
+	font-size: 60px;
+	font-weight: 600;
+	margin-bottom:10px;
+	color: #FF6347;
+}
+form
+{
+
+	background: #fff;
+	padding: 10px;
+	border-radius: 6px;
+	display: flex;
+	position: absolute;
+	top:60%;
+	left:28%;
+}
+form input
+{
+	flex: 1;
+	border: none;
+	outline: none;
+	padding: 0 17px;
+	font-size: 18px;
+}
+form button
+{
+	background: #ff3d00;
+	color: white;
+	padding: 15px 40px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+h1
+{
+	color: white;
+	position: absolute;
+	left:40%;
+	top:30;
+}  about.html:  <!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+ font-family: Arial, Helvetica, sans-serif;
+ margin: 0;
+}
+
+html {
+ box-sizing: border-box;
+}
+
+*, *:before, *:after {
+ box-sizing: inherit;
+}
+
+.column {
+ float: left;
+ width: 20%;
+ margin-bottom: 16px;
+ padding: 0 8px;
+}
+span{
+ color:indigo;
+ font-size: 37px;
+
+}
+
+.card {
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+ margin: 8px;
+}
+
+.about-section {
+ padding: 5px;
+ text-align: center;
+ background-image: url('backblur.jpg');
+ background-position: bottom;
+ background-repeat: no-repeat;
+ background-size: cover;
+ color:floralwhite;
+}
+
+.container {
+ padding: 0 16px;
+ background-image: url('bb.jpg');
+ background-position: bottom;
+ text-shadow: ghostwhite;
+ text-align: center;
+ font-weight: bolder;
+ font-size: medium;
+ color:darkred;
+}
+
+.container::after, .row::after {
+ content: "";
+ clear: both;
+ display: table;
+}
+
+.title {
+ color:maroon;
+}
+
+@media screen and (max-width: 650px) {
+ .column {
+  width: 100%;
+  display: block;
+ }
+}
+</style>
+</head>
+<body>
+
+<div class="about-section">
+ <h1 style="font-size: 43px;">About Us</h1>
+ <h3>Railway Reservation System</h3>
+ <h4><b>ExpressBooking: Seamlessly Reserve Your Train Seat
+_ MALLIREDDY DIVYASWARUPA</b></h4>
+</div>
+<h3 style="text-align:center;">“Railway Reservation System” is an attempt to simulate the basic concepts of an online Reservation system.This Software has developed for automating the manual
+ Railway Reservation System.</h3>
+<h4><center>*****************************************************************</center></h4>
+<h2 style="text-align:center;"><span>Our Team</span> </h2>
+<div class="row">
+ <div class="column">
+  <div class="card">
+   <div class="container">
+    <h2>M.DIVYASWARUPA</h2>
+    <p class="title">DESIGNER</p>
+    
+    <p>+91 8519868144</p>
+   </div>
+  </div>
+ </div>
+
+ <div class="column">
+  <div class="card">
+   <div class="container">
+    <h2>S.Saleha</h2>
+    <p class="title">DEVELOPER</p>
+   
+    <p>+91 8519868144 </p>
+   </div>
+  </div>
+ </div>
+  
+ <div class="column">
+  <div class="card">
+   <div class="container">
+    <h2>P.Harshitha</h2>
+    <p class="title">DEVELOPER</p>
+  
+    <p>+91 8519868144</p>
+   </div>
+  </div>
+ </div>
+ <div class="column">
+  <div class="card">
+   <div class="container">
+    <h2>B.Harathi</h2>
+    <p class="title">DEVELOPER</p>
+   
+    <p>+91 8519868144</p>
+   </div>
+  </div>
+ </div>
+ <div class="column">
+  <div class="card">
+   <div class="container">
+	<h2>K.Gowthami</h2>
+    <p class="title">DEVELOPER</p>
+    
+    <p>+91 8519868144</p>
+   </div>
+  </div>
+ </div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+this is the my whole project formatted like this filename:  code if errors or mistakes are there give me that filename and corrected code only and also remove sessions code if it included in my code
+expand_more
+
+Show drafts
+expand_more
+

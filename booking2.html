@@ -1,0 +1,35 @@
+<html>
+<head>
+	<title>Booking2</title>
+	<link rel="stylesheet" href="booking2.css">
+</head>
+<body>
+	<h1 align="center">Indian Railways</h1>
+	<div class="imp">
+	<div class="register">
+		<form action="thanks.html" method="post" id="reg"><br>
+			<label>Enter no.of passengers: </label><br>
+				<input type="text" placeholder="No.of passengers" name="uno"><br><br>	
+			<label>Enter FirstName of passenger: </label><br>
+				<input type="text" placeholder="FirstName" name="FirstName"/><br><br>
+			<label>Enter LastName of passenger: </label><br>
+				<input type="text" placeholder="LastName" name="LastName"/><br><br>
+			<label>Seat Preference: </label><br/>
+				<input type="radio" name="pref" value="2S"/>2S &nbsp 
+				<input type="radio" name="pref" value="SL"/>SL &nbsp
+				<input type="radio" name="pref" value="3A"/>3A &nbsp
+				<input type="radio" name="pref" value="2A"/>2A<br/><br/>
+			<label>Date of Journey: </label>
+				<input type="date"/><br/><br/>
+			<label>Select Payment mode </label>
+				<select name="payment">
+					<option>Google Pay</option>
+					<option>Phonepe</option>
+					<option>Paytm</option>
+				</select><br><br>
+			<p>Note: Money will be automatically deducted from your account when you submit</p><br>
+			<input type="submit" value="Submit"  id="submit"/>
+		</form>
+	</div>
+	</div>
+</body>
